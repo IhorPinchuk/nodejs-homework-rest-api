@@ -1,4 +1,7 @@
 import { Schema, model } from "mongoose";
+import Joi from "joi";
+
+import {handleMongooseError} from "../helpers/index.js"
 
 const contactSchema = new Schema ({
     name: {
@@ -15,8 +18,25 @@ const contactSchema = new Schema ({
         type: Boolean,
         default: false,
       },
+}, { versionKey: false, timestamps: true });
+
+contactSchema.post("save", handleMongooseError)
+
+const addSchema = Joi.object({
+  name: Joi.string().required().messages({
+    "any.required": `missing required name field`,
+  }),
+  email: Joi.string().required().messages({
+    "any.required": `missing required email field`,
+  }),
+  phone: Joi.string().required().messages({
+    "any.required": `missing required phone field`,
+  }),
+  favorite: Joi.bool()
 });
+
+// console.log(addSchema.validate)
 
 const Contact = model("contact", contactSchema);
 
-export default Contact;
+export default {Contact, addSchema};

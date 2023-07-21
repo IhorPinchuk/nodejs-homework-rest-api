@@ -1,15 +1,16 @@
-import Joi from "joi";
+// import Joi from "joi";
 
-const addSchema = Joi.object({
-  name: Joi.string().required().messages({
-    "any.required": `missing required name field`,
-  }),
-  email: Joi.string().required().messages({
-    "any.required": `missing required email field`,
-  }),
-  phone: Joi.string().required().messages({
-    "any.required": `missing required phone field`,
-  }),
-});
+// const addSchema = Joi.object({
+//     name: Joi.string().required().messages({
+//       "any.required": `missing required name field`,
+//     }),
+//     email: Joi.string().required().messages({
+//       "any.required": `missing required email field`,
+//     }),
+//     phone: Joi.string().required().messages({
+//       "any.required": `missing required phone field`,
+//     }),
+//     favorite: Joi.bool()
+//   });
 
-export default addSchema;
+// export default addSchema;

@@ -1,24 +1,28 @@
 import express from "express";
 import ctrl from "../../controllers/contacts.js";
-// import { validateBody } from "../../middlewares/index.js";
-// import addSchema from "../../schemas/contacts.js";
+import { validateBody, isValidId } from "../../middlewares/index.js";
+import schema from "../../models/contact.js";
+
+const {addSchema} = schema;
+console.log(addSchema)
 
 const router = express.Router();
 
 const { getListContacts, 
-    // getContactId, 
-    // add, deleteById,
+    getContactId, 
+     add, 
+    // deleteById,
     //  updateById
      } = ctrl;
 
 router.get("/", getListContacts);
 
-// router.get("/:id", getContactId);
+router.get("/:id", isValidId, getContactId);
 
-// router.post("/", validateBody(addSchema), add);
+router.post("/", validateBody(addSchema), add);
 
-// router.delete("/:id", deleteById);
+// router.delete("/:id", isValidId, deleteById);
 
-// router.put("/:id", validateBody(addSchema), updateById);
+// router.put("/:id", isValidId, validateBody(addSchema), updateById);
 
 export default router;
