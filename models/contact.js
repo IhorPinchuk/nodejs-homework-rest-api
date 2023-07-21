@@ -1,26 +1,29 @@
 import { Schema, model } from "mongoose";
 import Joi from "joi";
 
-import {handleMongooseError} from "../helpers/index.js"
+import { handleMongooseError } from "../helpers/index.js";
 
-const contactSchema = new Schema ({
+const contactSchema = new Schema(
+  {
     name: {
-        type: String,
-        required: [true, 'Set name for contact'],
-      },
-      email: {
-        type: String,
-      },
-      phone: {
-        type: String,
-      },
-      favorite: {
-        type: Boolean,
-        default: false,
-      },
-}, { versionKey: false, timestamps: true });
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-contactSchema.post("save", handleMongooseError)
+contactSchema.post("save", handleMongooseError);
 
 const addSchema = Joi.object({
   name: Joi.string().required().messages({
@@ -32,11 +35,15 @@ const addSchema = Joi.object({
   phone: Joi.string().required().messages({
     "any.required": `missing required phone field`,
   }),
-  favorite: Joi.bool()
+  favorite: Joi.boolean(),
 });
 
-// console.log(addSchema.validate)
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "any.required": `missing required favorite field`,
+  }),
+});
 
 const Contact = model("contact", contactSchema);
 
-export default {Contact, addSchema};
+export default { Contact, addSchema, updateFavoriteSchema };
