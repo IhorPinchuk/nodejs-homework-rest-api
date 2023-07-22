@@ -1,4 +1,4 @@
-const validateAtUpdate = (next) => {
+const validateAtUpdate = function(next) {
     this.options.runValidators = true;
     next();
 }
