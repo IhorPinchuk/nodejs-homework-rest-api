@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import Joi from "joi";
 
-import { handleMongooseError } from "../helpers/index.js";
+import { handleMongooseError, validateAtUpdate } from "../helpers/index.js";
 
 const contactSchema = new Schema(
   {
@@ -22,6 +22,8 @@ const contactSchema = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
+
+contactSchema.pre("findOneAndUpdate", validateAtUpdate);
 
 contactSchema.post("save", handleMongooseError);
 
