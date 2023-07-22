@@ -26,6 +26,7 @@ const contactSchema = new Schema(
 contactSchema.pre("findOneAndUpdate", validateAtUpdate);
 
 contactSchema.post("save", handleMongooseError);
+contactSchema.post("findOneAndUpdate", handleMongooseError);
 
 const addSchema = Joi.object({
   name: Joi.string().required().messages({
