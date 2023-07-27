@@ -28,6 +28,8 @@ contactSchema.pre("findOneAndUpdate", validateAtUpdate);
 contactSchema.post("save", handleMongooseError);
 contactSchema.post("findOneAndUpdate", handleMongooseError);
 
+const Contact = model("contact", contactSchema);
+
 const addSchema = Joi.object({
   name: Joi.string().required().messages({
     "any.required": `missing required name field`,
@@ -46,7 +48,5 @@ const updateFavoriteSchema = Joi.object({
     "any.required": `missing required favorite field`,
   }),
 });
-
-const Contact = model("contact", contactSchema);
 
 export default { Contact, addSchema, updateFavoriteSchema };
