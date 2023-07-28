@@ -4,71 +4,71 @@ import jwt from "jsonwebtoken";
 
 import { HttpError, ctrlWrapper } from "../helpers/index.js";
 
-const {JWT_SECRET} = process.env;
+const { JWT_SECRET } = process.env;
 
-const {User} = userModel;
+const { User } = userModel;
 
-const register = async(req, res) => {
-    const {email, password} = req.body;
-    const user = await User.findOne({email});
-    if(user) {
-        throw HttpError(409, "Email in use")
-    }
-    const hashPassword = await bcrypt.hash(password, 10);
-    
-const newUser = await User.create({...req.body, password: hashPassword});
+const register = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    throw HttpError(409, "Email in use");
+  }
+  const hashPassword = await bcrypt.hash(password, 10);
 
-res.status(201).json({
+  const newUser = await User.create({ ...req.body, password: hashPassword });
+
+  res.status(201).json({
     user: {
-        email: newUser.email,
-        subscription: newUser.subscription,
-    }
-})
-}
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
+  });
+};
 
 const login = async (req, res) => {
-    const {email, password} = req.body;
-    const user = await User.findOne({email});
-    if(!user) {
-        throw HttpError(401, "Email or password is wrong")
-    }
-    const passwordCompare = await bcrypt.compare(password, user.password);
-    if(!passwordCompare) {
-        throw HttpError(401, "Email or password is wrong")
-    }
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(401, "Email or password is wrong");
+  }
+  const passwordCompare = await bcrypt.compare(password, user.password);
+  if (!passwordCompare) {
+    throw HttpError(401, "Email or password is wrong");
+  }
 
-    const payload = {
-        id: user._id,
-    }
-    const token = jwt.sign(payload, JWT_SECRET, {expiresIn: "23h"});
-await User.findByIdAndUpdate(user._id, {token});
+  const payload = {
+    id: user._id,
+  };
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+  await User.findByIdAndUpdate(user._id, { token });
 
-    res.json({
-        token,
-        user: {
-            email: user.email,
-            subscription: user.subscription,
-        }
-    })
-}
+  res.json({
+    token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
+  });
+};
 
-const logout = async(req, res) => {
-const {_id} = req.user;
-await User.findByIdAndUpdate(_id, {token: ""});
-res.status(204).json();
-}
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+  res.status(204).json();
+};
 
-const getCurrent = async(req, res) => {
-const {email, subscription} = req.user;
-res.json({
+const getCurrent = (req, res) => {
+  const { email, subscription } = req.user;
+  res.json({
     email,
     subscription,
-})
-}
+  });
+};
 
 export default {
-    register: ctrlWrapper(register),
-    login: ctrlWrapper(login),
-    logout: ctrlWrapper(logout),
-    getCurrent: ctrlWrapper(getCurrent),
-}
+  register: ctrlWrapper(register),
+  login: ctrlWrapper(login),
+  logout: ctrlWrapper(logout),
+  getCurrent: ctrlWrapper(getCurrent),
+};

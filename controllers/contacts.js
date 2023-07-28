@@ -4,8 +4,8 @@ import { HttpError, ctrlWrapper } from "../helpers/index.js";
 const { Contact } = contactModel;
 
 const getListContacts = async (req, res) => {
-  const {_id: owner} = req.user;
-  const result = await Contact.find({owner}, "-createdAt -updatedAt");
+  const { _id: owner } = req.user;
+  const result = await Contact.find({ owner }, "-createdAt -updatedAt");
   res.json(result);
 };
 
@@ -19,11 +19,8 @@ const getContactId = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const {_id: owner} = req.user;
-  console.log(req.user)
-  console.log(owner)
-  console.log(req.user)
-  const result = await Contact.create({...req.body, owner});  
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
