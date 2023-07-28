@@ -8,7 +8,7 @@ import usersSchemas from "../../models/user.js";
 import authController from "../../controllers/auth-controller.js";
 
 const { userRegisterSchema, userLoginSchema } = usersSchemas;
-const { register, login, getCurrent } = authController;
+const { register, login, logout, getCurrent } = authController;
 
 const authRouter = express.Router();
 
@@ -22,6 +22,8 @@ authRouter.post(
 authRouter.post("/login", postRequestBodyIsEmpty,
 validateBody(userLoginSchema),
 login);
+
+authRouter.post("/logout", authenticate, logout)
 
 authRouter.get("/current", authenticate, getCurrent)
 
