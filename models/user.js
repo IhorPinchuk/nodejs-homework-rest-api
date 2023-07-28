@@ -38,6 +38,7 @@ const userRegisterSchema = Joi.object({
     password: Joi.string().min(6).required().messages({
       "any.required": `missing required password field`,
     }),
+    subscription: Joi.string(),
 })
 
 const userLoginSchema = Joi.object({
@@ -47,6 +48,7 @@ const userLoginSchema = Joi.object({
     password: Joi.string().min(6).required().messages({
       "any.required": `missing required password field`,
     }),
+    token: Joi.string(),
 })
 
 export default {User, userRegisterSchema, userLoginSchema};

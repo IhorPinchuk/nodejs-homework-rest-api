@@ -5,6 +5,7 @@ import {
   isValidId,
   postRequestBodyIsEmpty,
   patchRequestBodyIsEmpty,
+  authenticate,
 } from "../../middlewares/index.js";
 import schema from "../../models/contact.js";
 
@@ -21,16 +22,16 @@ const {
   updateStatusContact,
 } = ctrl;
 
-router.get("/", getListContacts);
+router.get("/", authenticate, getListContacts);
 
-router.get("/:id", isValidId, getContactId);
+router.get("/:id", authenticate, isValidId, getContactId);
 
-router.post("/", postRequestBodyIsEmpty, validateBody(addSchema), add);
+router.post("/", authenticate, postRequestBodyIsEmpty, validateBody(addSchema), add);
 
-router.delete("/:id", isValidId, deleteById);
+router.delete("/:id", authenticate, isValidId, deleteById);
 
 router.put(
-  "/:id",
+  "/:id", authenticate,
   postRequestBodyIsEmpty,
   isValidId,
   validateBody(addSchema),
@@ -38,7 +39,7 @@ router.put(
 );
 
 router.patch(
-  "/:id/favorite",
+  "/:id/favorite", authenticate,
   patchRequestBodyIsEmpty,
   isValidId,
   validateBody(updateFavoriteSchema),
