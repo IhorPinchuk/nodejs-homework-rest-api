@@ -5,8 +5,29 @@ const { Contact } = contactModel;
 
 const getListContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await Contact.find({ owner }, "-createdAt -updatedAt");
-  res.json(result);
+  const {page = 1, limit = 10, favorite} = req.query;
+  const skip = (page - 1) * limit;
+  const totalContacts = (await Contact.find({ owner })).length;
+  let contacts = await Contact.find({ owner }, "-createdAt -updatedAt", {skip, limit});
+  if(favorite) {    
+    contacts = await Contact.find({ owner, favorite }, "-createdAt -updatedAt", {skip, limit});
+    // const totalFavoriteContacts = (await Contact.find({ owner, favorite })).length;
+    // res.json({
+    //   contacts,
+    //   page,
+    //   perPage: limit,
+    //   totalContacts,
+    //   totalFavoriteContacts,
+    // });
+  }
+  
+  
+    res.json({
+    contacts,
+    page,
+    perPage: limit,
+    totalContacts,    
+  });
 };
 
 const getContactId = async (req, res) => {
