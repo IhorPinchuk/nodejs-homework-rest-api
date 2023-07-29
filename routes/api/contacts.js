@@ -26,12 +26,19 @@ router.get("/", authenticate, getListContacts);
 
 router.get("/:id", authenticate, isValidId, getContactId);
 
-router.post("/", authenticate, postRequestBodyIsEmpty, validateBody(addSchema), add);
+router.post(
+  "/",
+  authenticate,
+  postRequestBodyIsEmpty,
+  validateBody(addSchema),
+  add
+);
 
 router.delete("/:id", authenticate, isValidId, deleteById);
 
 router.put(
-  "/:id", authenticate,
+  "/:id",
+  authenticate,
   postRequestBodyIsEmpty,
   isValidId,
   validateBody(addSchema),
@@ -39,7 +46,8 @@ router.put(
 );
 
 router.patch(
-  "/:id/favorite", authenticate,
+  "/:id/favorite",
+  authenticate,
   patchRequestBodyIsEmpty,
   isValidId,
   validateBody(updateFavoriteSchema),
