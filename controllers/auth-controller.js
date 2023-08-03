@@ -1,12 +1,17 @@
 import userModel from "../models/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import fs from "fs/promises";
+import path from "path";
+import gravatar from "gravatar";
 
 import { HttpError, ctrlWrapper } from "../helpers/index.js";
 
 const { JWT_SECRET } = process.env;
 
 const { User } = userModel;
+
+const avatarPath = path.resolve("public", "avatars");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -15,8 +20,17 @@ const register = async (req, res) => {
     throw HttpError(409, "Email in use");
   }
   const hashPassword = await bcrypt.hash(password, 10);
-
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  let avatarURL = "";
+  if(!req.file) {
+    avatarURL = gravatar.url(email);
+  } else {
+    const { path: oldPath, filename } = req.file;
+    const newPath = path.join(avatarPath, filename);
+    await fs.rename(oldPath, newPath);
+    avatarURL = path.join("avatars", filename);
+  }
+  
+  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
 
   res.status(201).json({
     user: {

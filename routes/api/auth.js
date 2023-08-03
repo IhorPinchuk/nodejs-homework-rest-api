@@ -5,6 +5,7 @@ import {
   postRequestBodyIsEmpty,
   authenticate,
   patchSubscriptionBodyIsEmpty,
+  upload,
 } from "../../middlewares/index.js";
 import usersSchemas from "../../models/user.js";
 import authController from "../../controllers/auth-controller.js";
@@ -19,7 +20,9 @@ const authRouter = express.Router();
 
 authRouter.post(
   "/register",
+  upload.single("avatar"),  
   postRequestBodyIsEmpty,
+  
   validateBody(userRegisterSchema),
   register
 );

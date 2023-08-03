@@ -5,7 +5,7 @@ import {
   isValidId,
   postRequestBodyIsEmpty,
   patchRequestBodyIsEmpty,
-  authenticate,
+  authenticate,  
 } from "../../middlewares/index.js";
 import schema from "../../models/contact.js";
 
