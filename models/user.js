@@ -23,6 +23,7 @@ const userSchema = new Schema(
       default: "starter",
     },
     token: String,
+    avatarURL: String,
   },
   { versionKey: false, timestamps: true }
 );
@@ -42,6 +43,7 @@ const userRegisterSchema = Joi.object({
     "any.required": `missing required password field`,
   }),
   subscription: Joi.string(),
+  avatarURL: Joi.string(),
 });
 
 const userLoginSchema = Joi.object({
