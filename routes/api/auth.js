@@ -7,15 +7,22 @@ import {
   patchSubscriptionBodyIsEmpty,
   upload,
   patchAvatarBodyIsEmpty,
+  isValidId,
+  postVerifyEmailBodyIsEmpty,
 } from "../../middlewares/index.js";
 import usersSchemas from "../../models/user.js";
 import authController from "../../controllers/auth-controller.js";
-import { isValidId } from "../../middlewares/index.js";
 
-const { userRegisterSchema, userLoginSchema, updateSubscriptionSchema } =
-  usersSchemas;
+const {
+  userRegisterSchema,
+  userLoginSchema,
+  updateSubscriptionSchema,
+  userEmailSchema,
+} = usersSchemas;
 const {
   register,
+  verify,
+  resendVerifyEmail,
   login,
   logout,
   getCurrent,
@@ -31,6 +38,15 @@ authRouter.post(
   postRequestBodyIsEmpty,
   validateBody(userRegisterSchema),
   register
+);
+
+authRouter.get("/verify/:verificationToken", verify);
+
+authRouter.post(
+  "/verify",
+  postVerifyEmailBodyIsEmpty,
+  validateBody(userEmailSchema),
+  resendVerifyEmail
 );
 
 authRouter.post(
