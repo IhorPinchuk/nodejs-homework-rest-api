@@ -31,7 +31,6 @@ const {
 } = authController;
 
 const authRouter = express.Router();
-const authVerifyRouter = express.Router();
 
 authRouter.post(
   "/register",
@@ -41,9 +40,9 @@ authRouter.post(
   register
 );
 
-authVerifyRouter.get("/verify/:verificationToken", verify);
+authRouter.get("/verify/:verificationToken", verify);
 
-authVerifyRouter.post(
+authRouter.post(
   "/verify",
   postVerifyEmailBodyIsEmpty,
   validateBody(userEmailSchema),
@@ -78,4 +77,4 @@ authRouter.patch(
   updateAvatar
 );
 
-export default { authRouter, authVerifyRouter };
+export default authRouter;
